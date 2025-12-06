@@ -43,4 +43,3 @@ ALTER ROLE product_manager_user SET search_path = product_management;
 
 -- connect as the new login user
 \c product_management_db product_manager_user
-
