@@ -1,17 +1,17 @@
 -- product table
 CREATE TABLE Product (
-    id serial primary key,
-    name varchar(200) not null,
-    price numeric(0,2) not null,
-    creation_datetime timestamp default current_timestamp
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(200) NOT NULL,
+    price NUMERIC(0,2) NOT NULL,
+    creation_datetime TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- product_category table
 CREATE TABLE Product_category (
-    id serial primary key,
-    name varchar(200) not null,
-    product_id int unique not null,
-    constraint  foreign_key_product
-        foreign key (product_id)
-        references product(id)
+    id SERIAL PRIMARY KEY ,
+    name VARCHAR(200) NOT NULL,
+    product_id INT NOT NULL,
+    CONSTRAINT foreign_key_product
+        FOREIGN KEY (product_id)
+        REFERENCES product(id)
 )
