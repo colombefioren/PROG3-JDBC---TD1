@@ -2,7 +2,7 @@
 CREATE TABLE Product (
     id SERIAL PRIMARY KEY,
     name VARCHAR(200) NOT NULL,
-    price NUMERIC(0,2) NOT NULL,
+    price NUMERIC(10,2) NOT NULL,
     creation_datetime TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
