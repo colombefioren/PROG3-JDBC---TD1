@@ -15,4 +15,4 @@ CREATE TABLE Product_category (
         FOREIGN KEY (product_id)
         REFERENCES product(id)
         ON DELETE CASCADE
-)
+);
