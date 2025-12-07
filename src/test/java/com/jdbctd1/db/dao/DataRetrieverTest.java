@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.jdbctd1.model.Category;
 import com.jdbctd1.model.Product;
+import com.jdbctd1.repository.DataRetriever;
+import com.jdbctd1.util.DateUtils;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -78,9 +78,7 @@ class DataRetrieverTest {
 
     assertEquals(2, products.size(), "Should find 2 products in 'info' category (Informatique)");
     products.forEach(
-        product -> {
-          assertTrue(product.getCategory().getName().toLowerCase().contains("info"));
-        });
+        product -> assertTrue(product.getCategory().getName().toLowerCase().contains("info")));
   }
 
   @Test
@@ -97,8 +95,9 @@ class DataRetrieverTest {
   @Test
   @DisplayName("Scenario 4 - Should filter by date range (2024-02-01 to 2024-03-01)")
   void testGetProductsByCriteria_Scenario4_DateRange() {
-    Instant minDate = toInstant(2024, 2, 1);
-    Instant maxDate = toInstant(2024, 3, 1, 23, 59, 59);
+    DateUtils dateUtils = new DateUtils();
+    Instant minDate = dateUtils.toInstant(2024, 2, 1);
+    Instant maxDate = dateUtils.toInstant(2024, 3, 1, 23, 59, 59);
     List<Product> products = dataRetriever.getProductsByCriteria(null, null, minDate, maxDate);
 
     // should find: iPhone 13 (2024-02-01) and Casque Sony (2024-02-10)
@@ -138,8 +137,9 @@ class DataRetrieverTest {
   @Test
   @DisplayName("Scenario 7 - Should filter by category and date range (audio + 2024 year)")
   void testGetProductsByCriteria_Scenario7_AudioDateRange() {
-    Instant minDate = toInstant(2024, 1, 1);
-    Instant maxDate = toInstant(2024, 12, 1, 23, 59, 59);
+    DateUtils dateUtils = new DateUtils();
+    Instant minDate = dateUtils.toInstant(2024, 1, 1);
+    Instant maxDate = dateUtils.toInstant(2024, 12, 1, 23, 59, 59);
 
     List<Product> products = dataRetriever.getProductsByCriteria(null, "audio", minDate, maxDate);
 
@@ -194,10 +194,7 @@ class DataRetrieverTest {
     List<Product> products =
         dataRetriever.getProductsByCriteria(null, "informatique", null, null, 1, 10);
     assertEquals(2, products.size(), "Should find 2 products with Informatique category");
-    products.forEach(
-        product -> {
-          assertEquals("Informatique", product.getCategory().getName());
-        });
+    products.forEach(product -> assertEquals("Informatique", product.getCategory().getName()));
 
     boolean hasDell = products.stream().anyMatch(p -> p.getName().contains("Dell"));
     boolean hasSamsung = products.stream().anyMatch(p -> p.getName().contains("Samsung"));
@@ -246,23 +243,5 @@ class DataRetrieverTest {
         dataRetriever.getProductsByCriteria(
             "NonExistentProduct", "NonExistentCategory", null, null);
     assertTrue(products.isEmpty());
-  }
-
-  // =========== UTILS ===========
-
-  private Instant toInstant(int year, int month, int day) {
-    return LocalDateTime.of(year, month, day, 0, 0, 0).atZone(ZoneId.systemDefault()).toInstant();
-  }
-
-  private Instant toInstant(int year, int month, int day, int hour, int minute) {
-    return LocalDateTime.of(year, month, day, hour, minute, 0)
-        .atZone(ZoneId.systemDefault())
-        .toInstant();
-  }
-
-  private Instant toInstant(int year, int month, int day, int hour, int minute, int second) {
-    return LocalDateTime.of(year, month, day, hour, minute, second)
-        .atZone(ZoneId.systemDefault())
-        .toInstant();
   }
 }

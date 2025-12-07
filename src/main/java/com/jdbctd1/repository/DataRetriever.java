@@ -1,8 +1,6 @@
-package com.jdbctd1.db.dao;
+package com.jdbctd1.repository;
 
 import com.jdbctd1.db.DBConnection;
-import com.jdbctd1.db.dao.repository.CategoryRepository;
-import com.jdbctd1.db.dao.repository.ProductRepository;
 import com.jdbctd1.model.Category;
 import com.jdbctd1.model.Product;
 import java.sql.*;

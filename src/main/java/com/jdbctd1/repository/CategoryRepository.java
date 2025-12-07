@@ -1,4 +1,4 @@
-package com.jdbctd1.db.dao.repository;
+package com.jdbctd1.repository;
 
 import com.jdbctd1.model.Category;
 import java.util.List;

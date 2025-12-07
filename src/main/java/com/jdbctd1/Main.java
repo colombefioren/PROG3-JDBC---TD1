@@ -1,15 +1,15 @@
 package com.jdbctd1;
 
-import com.jdbctd1.db.dao.DataRetriever;
 import com.jdbctd1.model.Category;
+import com.jdbctd1.repository.DataRetriever;
+import com.jdbctd1.util.DateUtils;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 
 public class Main {
   public static void main(String[] args) {
     DataRetriever dataRetriever = new DataRetriever();
+    DateUtils dateUtils = new DateUtils();
 
     // a) List<Category> getAllCategories()
     System.out.println("=== TEST 1: getAllCategories() ===");
@@ -51,8 +51,8 @@ public class Main {
             + dataRetriever.getProductsByCriteria("iPhone", "mobile", null, null).size()
             + " products");
 
-    Instant minDate1 = toInstant(2024, 2, 1);
-    Instant maxDate1 = toInstant(2024, 3, 1, 23, 59);
+    Instant minDate1 = dateUtils.toInstant(2024, 2, 1);
+    Instant maxDate1 = dateUtils.toInstant(2024, 3, 1, 23, 59);
     System.out.println(
         "Scenario 4 - date range 2024-02-01 to 2024-03-01: "
             + dataRetriever.getProductsByCriteria(null, null, minDate1, maxDate1).size()
@@ -68,8 +68,8 @@ public class Main {
             + dataRetriever.getProductsByCriteria("Sony", "informatique", null, null).size()
             + " products");
 
-    Instant minDate2 = toInstant(2024, 1, 1);
-    Instant maxDate2 = toInstant(2024, 12, 1, 23, 59);
+    Instant minDate2 = dateUtils.toInstant(2024, 1, 1);
+    Instant maxDate2 = dateUtils.toInstant(2024, 12, 1, 23, 59);
     System.out.println(
         "Scenario 7 - categoryName='audio', date range 2024-01-01 to 2024-12-01: "
             + dataRetriever.getProductsByCriteria(null, "audio", minDate2, maxDate2).size()
@@ -98,15 +98,5 @@ public class Main {
         "Scenario 3 - categoryName='informatique', page 1, size 10: "
             + dataRetriever.getProductsByCriteria(null, "informatique", null, null, 1, 10).size()
             + " products");
-  }
-
-  private static Instant toInstant(int year, int month, int day) {
-    return LocalDateTime.of(year, month, day, 0, 0, 0).atZone(ZoneId.systemDefault()).toInstant();
-  }
-
-  private static Instant toInstant(int year, int month, int day, int hour, int minute) {
-    return LocalDateTime.of(year, month, day, hour, minute, 0)
-        .atZone(ZoneId.systemDefault())
-        .toInstant();
   }
 }
