@@ -161,7 +161,6 @@ class DataRetrieverTest {
   @DisplayName("TEST 3 - Scenario 8 - Should return all products when all criteria are null")
   void testGetProductsByCriteria_Scenario8_AllNull() {
     List<Product> products = dataRetriever.getProductsByCriteria(null, null, null, null);
-    System.out.println(products);
     assertEquals(7, products.size(), "Should return all 7 product-category entries");
 
     products.forEach(
