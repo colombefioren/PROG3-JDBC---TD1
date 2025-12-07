@@ -97,7 +97,7 @@ class DataRetrieverTest {
   void testGetProductsByCriteria_Scenario4_DateRange() {
     DateUtils dateUtils = new DateUtils();
     Instant minDate = dateUtils.toInstant(2024, 2, 1);
-    Instant maxDate = dateUtils.toInstant(2024, 3, 1, 23, 59, 59);
+    Instant maxDate = dateUtils.toInstant(2024, 3, 1, 23, 59);
     List<Product> products = dataRetriever.getProductsByCriteria(null, null, minDate, maxDate);
 
     // should find: iPhone 13 (2024-02-01) and Casque Sony (2024-02-10)
@@ -140,7 +140,7 @@ class DataRetrieverTest {
   void testGetProductsByCriteria_Scenario7_AudioDateRange() {
     DateUtils dateUtils = new DateUtils();
     Instant minDate = dateUtils.toInstant(2024, 1, 1);
-    Instant maxDate = dateUtils.toInstant(2024, 12, 1, 23, 59, 59);
+    Instant maxDate = dateUtils.toInstant(2024, 12, 1, 23, 59);
 
     List<Product> products = dataRetriever.getProductsByCriteria(null, "audio", minDate, maxDate);
 
