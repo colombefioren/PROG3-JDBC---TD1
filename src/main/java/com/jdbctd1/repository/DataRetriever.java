@@ -5,7 +5,6 @@ import com.jdbctd1.model.Category;
 import com.jdbctd1.model.Product;
 import java.sql.*;
 import java.time.Instant;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,22 +60,7 @@ public class DataRetriever implements ProductRepository, CategoryRepository {
 
       try (ResultSet rs = ps.executeQuery()) {
         while (rs.next()) {
-          Product product = new Product();
-          product.setId(rs.getInt("id"));
-          product.setName(rs.getString("name"));
-          product.setCreationDatetime(
-              rs.getTimestamp("creation_datetime")
-                  .toLocalDateTime()
-                  .atZone(ZoneId.systemDefault())
-                  .toInstant());
-
-          Category category = new Category();
-          category.setId(rs.getInt("cat_id"));
-          category.setName(rs.getString("cat_name"));
-
-          product.setCategory(category);
-
-          result.add(product);
+          result.add(createProductFromResultSet(rs));
         }
       }
 
@@ -91,7 +75,7 @@ public class DataRetriever implements ProductRepository, CategoryRepository {
   public List<Product> getProductsByCriteria(
       String productName, String categoryName, Instant creationMin, Instant creationMax) {
     return getProductsByCriteriaWithPagination(
-        productName, categoryName, creationMin, creationMax, 0, 0);
+        productName, categoryName, creationMin, creationMax, 1, 0);
   }
 
   @Override
@@ -163,7 +147,13 @@ public class DataRetriever implements ProductRepository, CategoryRepository {
       }
 
       try (ResultSet rs = ps.executeQuery()) {
-        return mapProductsWithCategoryRows(rs);
+        List<Product> products = new ArrayList<>();
+
+        while (rs.next()) {
+          products.add(createProductFromResultSet(rs));
+        }
+
+        return products;
       }
 
     } catch (SQLException e) {
@@ -171,27 +161,21 @@ public class DataRetriever implements ProductRepository, CategoryRepository {
     }
   }
 
-  private List<Product> mapProductsWithCategoryRows(ResultSet rs) throws SQLException {
-    List<Product> products = new ArrayList<>();
+  private Product createProductFromResultSet(ResultSet rs) throws SQLException {
+    Product product = new Product();
+    product.setId(rs.getInt("id"));
+    product.setName(rs.getString("name"));
 
-    while (rs.next()) {
-      Product product = new Product();
-      product.setId(rs.getInt("id"));
-      product.setName(rs.getString("name"));
-
-      Timestamp ts = rs.getTimestamp("creation_datetime");
-      if (ts != null) {
-        product.setCreationDatetime(ts.toInstant());
-      }
-
-      int catId = rs.getInt("cat_id");
-      if (!rs.wasNull()) {
-        product.setCategory(new Category(catId, rs.getString("cat_name")));
-      }
-
-      products.add(product);
+    Timestamp timestamp = rs.getTimestamp("creation_datetime");
+    if (timestamp != null) {
+      product.setCreationDatetime(timestamp.toInstant());
     }
 
-    return products;
+    int catId = rs.getInt("cat_id");
+    if (!rs.wasNull()) {
+      product.setCategory(new Category(catId, rs.getString("cat_name")));
+    }
+
+    return product;
   }
 }
