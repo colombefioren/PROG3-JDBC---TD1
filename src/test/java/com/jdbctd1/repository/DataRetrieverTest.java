@@ -1,10 +1,9 @@
-package com.jdbctd1.db.dao;
+package com.jdbctd1.repository;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.jdbctd1.model.Category;
 import com.jdbctd1.model.Product;
-import com.jdbctd1.repository.DataRetriever;
 import com.jdbctd1.util.DateUtils;
 import java.time.Instant;
 import java.util.List;
