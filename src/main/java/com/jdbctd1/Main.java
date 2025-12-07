@@ -20,17 +20,17 @@ public class Main {
     // b) List<Product> getProductList (int page, int size)
     System.out.println("\n=== TEST 2: getProductList() ===");
 
-    System.out.println("Scenario 1 - Page 1, Size 3:");
-    dataRetriever.getProductList(1, 3).forEach(p -> System.out.println("  - " + p));
-
-    System.out.println("\nScenario 2 - Page 2, Size 2:");
-    dataRetriever.getProductList(2, 2).forEach(p -> System.out.println("  - " + p));
-
-    System.out.println("\nScenario 3 - Page 1, Size 10:");
+    System.out.println("Scenario 1 - Page 1, Size 10:");
     dataRetriever.getProductList(1, 10).forEach(p -> System.out.println("  - " + p));
 
-    System.out.println("\nScenario 4 - Page 3, Size 2:");
-    dataRetriever.getProductList(3, 2).forEach(p -> System.out.println("  - " + p));
+    System.out.println("\nScenario 2 - Page 1, Size 5:");
+    dataRetriever.getProductList(1, 5).forEach(p -> System.out.println("  - " + p));
+
+    System.out.println("\nScenario 3 - Page 1, Size 3:");
+    dataRetriever.getProductList(1, 3).forEach(p -> System.out.println("  - " + p));
+
+    System.out.println("\nScenario 4 - Page 2, Size 2:");
+    dataRetriever.getProductList(2, 2).forEach(p -> System.out.println("  - " + p));
 
     // c) List<Product> getProductsByCriteria(String productName, String categoryName, Instant
     // creationMin, instant creationMax)

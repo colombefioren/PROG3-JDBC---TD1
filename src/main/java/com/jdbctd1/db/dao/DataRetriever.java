@@ -9,9 +9,7 @@ import java.sql.*;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DataRetriever implements ProductRepository, CategoryRepository {
 
@@ -121,7 +119,7 @@ public class DataRetriever implements ProductRepository, CategoryRepository {
     StringBuilder sql =
         new StringBuilder(
             """
-        SELECT DISTINCT p.id, p.name, p.price, p.creation_datetime,
+        SELECT p.id, p.name, p.price, p.creation_datetime,
                pc.id AS cat_id, pc.name AS cat_name
         FROM Product p
         LEFT JOIN Product_category pc ON p.id = pc.product_id
@@ -167,7 +165,7 @@ public class DataRetriever implements ProductRepository, CategoryRepository {
       }
 
       try (ResultSet rs = ps.executeQuery()) {
-        return mapProductsFromResultSet(rs);
+        return mapProductsWithCategoryRows(rs);
       }
 
     } catch (SQLException e) {
@@ -175,38 +173,27 @@ public class DataRetriever implements ProductRepository, CategoryRepository {
     }
   }
 
-  private List<Product> mapProductsFromResultSet(ResultSet rs) throws SQLException {
-    Map<Integer, Product> productMap = new LinkedHashMap<>();
+  private List<Product> mapProductsWithCategoryRows(ResultSet rs) throws SQLException {
+    List<Product> products = new ArrayList<>();
 
     while (rs.next()) {
-      int productId = rs.getInt("id");
+      Product product = new Product();
+      product.setId(rs.getInt("id"));
+      product.setName(rs.getString("name"));
 
-      Product product =
-          productMap.computeIfAbsent(
-              productId,
-              id -> {
-                try {
-                  Product p = new Product();
-                  p.setId(id);
-                  p.setName(rs.getString("name"));
-
-                  Timestamp ts = rs.getTimestamp("creation_datetime");
-                  if (ts != null) {
-                    p.setCreationDatetime(ts.toInstant());
-                  }
-
-                  return p;
-                } catch (SQLException e) {
-                  throw new RuntimeException(e);
-                }
-              });
+      Timestamp ts = rs.getTimestamp("creation_datetime");
+      if (ts != null) {
+        product.setCreationDatetime(ts.toInstant());
+      }
 
       int catId = rs.getInt("cat_id");
       if (!rs.wasNull()) {
         product.setCategory(new Category(catId, rs.getString("cat_name")));
       }
+
+      products.add(product);
     }
 
-    return new ArrayList<>(productMap.values());
+    return products;
   }
 }
