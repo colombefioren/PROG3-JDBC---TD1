@@ -52,7 +52,7 @@ public class Main {
             + " products");
 
     Instant minDate1 = dateUtils.toInstant(2024, 2, 1);
-    Instant maxDate1 = dateUtils.toInstant(2024, 3, 1, 23, 59);
+    Instant maxDate1 = dateUtils.toInstant(2024, 3, 1);
     System.out.println(
         "Scenario 4 - date range 2024-02-01 to 2024-03-01: "
             + dataRetriever.getProductsByCriteria(null, null, minDate1, maxDate1).size()
@@ -69,7 +69,7 @@ public class Main {
             + " products");
 
     Instant minDate2 = dateUtils.toInstant(2024, 1, 1);
-    Instant maxDate2 = dateUtils.toInstant(2024, 12, 1, 23, 59);
+    Instant maxDate2 = dateUtils.toInstant(2024, 12, 1);
     System.out.println(
         "Scenario 7 - categoryName='audio', date range 2024-01-01 to 2024-12-01: "
             + dataRetriever.getProductsByCriteria(null, "audio", minDate2, maxDate2).size()
