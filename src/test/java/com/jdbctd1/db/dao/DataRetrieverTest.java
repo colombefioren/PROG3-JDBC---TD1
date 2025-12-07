@@ -27,7 +27,7 @@ class DataRetrieverTest {
   // =========== TEST 1: getAllCategories() ===========
 
   @Test
-  @DisplayName("Should retrieve all 7 categories")
+  @DisplayName("TEST 1 - Should retrieve all 7 categories")
   void testGetAllCategories() {
     List<Category> categories = dataRetriever.getAllCategories();
 
@@ -44,7 +44,7 @@ class DataRetrieverTest {
     "1, 3, 3", // scenario 3: first three products
     "2, 2, 2", // scenario 4: the second pair of products
   })
-  @DisplayName("Should paginate products correctly for all scenarios")
+  @DisplayName("TEST 2 - Should paginate products correctly for all scenarios")
   void testGetProductListPagination(int page, int size, int expectedCount) {
     List<Product> products = dataRetriever.getProductList(page, size);
 
@@ -62,7 +62,7 @@ class DataRetrieverTest {
   // =========== TEST 3: getProductsByCriteria() without pagination ===========
 
   @Test
-  @DisplayName("Scenario 1 - Should filter by product name (Dell)")
+  @DisplayName("TEST 3 - Scenario 1 - Should filter by product name (Dell)")
   void testGetProductsByCriteria_Scenario1_Dell() {
     List<Product> products = dataRetriever.getProductsByCriteria("Dell", null, null, null);
     assertEquals(1, products.size(), "Should find 1 Dell product");
@@ -72,7 +72,7 @@ class DataRetrieverTest {
   }
 
   @Test
-  @DisplayName("Scenario 2 - Should filter by category name (info)")
+  @DisplayName("TEST 3 - Scenario 2 - Should filter by category name (info)")
   void testGetProductsByCriteria_Scenario2_CategoryInfo() {
     List<Product> products = dataRetriever.getProductsByCriteria(null, "info", null, null);
 
@@ -82,7 +82,8 @@ class DataRetrieverTest {
   }
 
   @Test
-  @DisplayName("Scenario 3 - Should filter by product name and category name (iPhone + mobile)")
+  @DisplayName(
+      "TEST 3 - Scenario 3 - Should filter by product name and category name (iPhone + mobile)")
   void testGetProductsByCriteria_Scenario3_iPhoneMobile() {
     List<Product> products = dataRetriever.getProductsByCriteria("iPhone", "mobile", null, null);
 
@@ -93,7 +94,7 @@ class DataRetrieverTest {
   }
 
   @Test
-  @DisplayName("Scenario 4 - Should filter by date range (2024-02-01 to 2024-03-01)")
+  @DisplayName("TEST 3 - Scenario 4 - Should filter by date range (2024-02-01 to 2024-03-01)")
   void testGetProductsByCriteria_Scenario4_DateRange() {
     DateUtils dateUtils = new DateUtils();
     Instant minDate = dateUtils.toInstant(2024, 2, 1);
@@ -115,7 +116,8 @@ class DataRetrieverTest {
   }
 
   @Test
-  @DisplayName("Scenario 5 - Should filter by product name and category (Samsung + bureau)")
+  @DisplayName(
+      "TEST 3 - Scenario 5 - Should filter by product name and category (Samsung + bureau)")
   void testGetProductsByCriteria_Scenario5_SamsungBureau() {
     List<Product> products = dataRetriever.getProductsByCriteria("Samsung", "bureau", null, null);
 
@@ -126,7 +128,7 @@ class DataRetrieverTest {
   }
 
   @Test
-  @DisplayName("Scenario 6 - Should return empty when no match (Sony + informatique)")
+  @DisplayName("TEST 3 - Scenario 6 - Should return empty when no match (Sony + informatique)")
   void testGetProductsByCriteria_Scenario6_SonyInformatique() {
     List<Product> products =
         dataRetriever.getProductsByCriteria("Sony", "informatique", null, null);
@@ -135,7 +137,7 @@ class DataRetrieverTest {
   }
 
   @Test
-  @DisplayName("Scenario 7 - Should filter by category and date range (audio + 2024 year)")
+  @DisplayName("TEST 3 - Scenario 7 - Should filter by category and date range (audio + 2024 year)")
   void testGetProductsByCriteria_Scenario7_AudioDateRange() {
     DateUtils dateUtils = new DateUtils();
     Instant minDate = dateUtils.toInstant(2024, 1, 1);
@@ -157,7 +159,7 @@ class DataRetrieverTest {
   }
 
   @Test
-  @DisplayName("Scenario 8 - Should return all products when all criteria are null")
+  @DisplayName("TEST 3 - Scenario 8 - Should return all products when all criteria are null")
   void testGetProductsByCriteria_Scenario8_AllNull() {
     List<Product> products = dataRetriever.getProductsByCriteria(null, null, null, null);
     System.out.println(products);
@@ -173,14 +175,14 @@ class DataRetrieverTest {
   // =========== TEST 4: getProductsByCriteria() with pagination ===========
 
   @Test
-  @DisplayName("Scenario 1 - Should return all products paginated (page 1, size 10)")
+  @DisplayName("TEST 4 - Scenario 1 - Should return all products paginated (page 1, size 10)")
   void testGetProductsByCriteriaWithPagination_Scenario1_AllProducts() {
     List<Product> products = dataRetriever.getProductsByCriteria(null, null, null, null, 1, 10);
     assertEquals(7, products.size(), "Should return all 7 product-category entries");
   }
 
   @Test
-  @DisplayName("Scenario 2 - Should filter and paginate (Dell, page 1, size 5)")
+  @DisplayName("TEST 4 - Scenario 2 - Should filter and paginate (Dell, page 1, size 5)")
   void testGetProductsByCriteriaWithPagination_Scenario2_Dell() {
     List<Product> products = dataRetriever.getProductsByCriteria("Dell", null, null, null, 1, 5);
     assertEquals(1, products.size(), "Should find 1 Dell product");
@@ -189,7 +191,7 @@ class DataRetrieverTest {
 
   @Test
   @DisplayName(
-      "Scenario 3 - Should filter by category and paginate (informatique, page 1, size 10)")
+      "TEST 4 - Scenario 3 - Should filter by category and paginate (informatique, page 1, size 10)")
   void testGetProductsByCriteriaWithPagination_Scenario3_Informatique() {
     List<Product> products =
         dataRetriever.getProductsByCriteria(null, "informatique", null, null, 1, 10);
@@ -204,7 +206,7 @@ class DataRetrieverTest {
   // =========== ADDITIONAL TESTS ===========
 
   @Test
-  @DisplayName("Should handle empty string criteria")
+  @DisplayName("TEST 5 - Should handle empty string criteria")
   void testGetProductsByCriteria_EmptyStrings() {
     List<Product> products1 = dataRetriever.getProductsByCriteria("", null, null, null);
     List<Product> products2 = dataRetriever.getProductsByCriteria(null, "", null, null);
@@ -215,7 +217,7 @@ class DataRetrieverTest {
   }
 
   @Test
-  @DisplayName("Should be case-insensitive with ILIKE")
+  @DisplayName("TEST 5 - Should be case-insensitive with ILIKE")
   void testGetProductsByCriteria_CaseInsensitive() {
     List<Product> products1 = dataRetriever.getProductsByCriteria("DELL", null, null, null);
     List<Product> products2 = dataRetriever.getProductsByCriteria("dell", null, null, null);
@@ -226,7 +228,7 @@ class DataRetrieverTest {
   }
 
   @Test
-  @DisplayName("Should handle partial matches with ILIKE")
+  @DisplayName("TEST 5 - Should handle partial matches with ILIKE")
   void testGetProductsByCriteria_PartialMatch() {
     List<Product> products1 = dataRetriever.getProductsByCriteria("lap", null, null, null);
     assertFalse(products1.isEmpty());
@@ -237,7 +239,7 @@ class DataRetrieverTest {
   }
 
   @Test
-  @DisplayName("Should return empty list for non-existent criteria")
+  @DisplayName("TEST 5 - Should return empty list for non-existent criteria")
   void testGetProductsByCriteria_NonExistent() {
     List<Product> products =
         dataRetriever.getProductsByCriteria(
