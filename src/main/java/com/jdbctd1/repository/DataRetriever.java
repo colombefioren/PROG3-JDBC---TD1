@@ -121,12 +121,12 @@ public class DataRetriever implements ProductRepository, CategoryRepository {
     }
 
     if (creationMin != null) {
-      sql.append(" AND p.creation_datetime > ?");
+      sql.append(" AND p.creation_datetime >= ?");
       parameters.add(Timestamp.from(creationMin));
     }
 
     if (creationMax != null) {
-      sql.append(" AND p.creation_datetime < ?");
+      sql.append(" AND p.creation_datetime <= ?");
       parameters.add(Timestamp.from(creationMax));
     }
 
