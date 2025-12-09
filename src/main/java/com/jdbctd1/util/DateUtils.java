@@ -7,6 +7,6 @@ import java.time.ZoneId;
 public class DateUtils {
 
   public Instant toInstant(int year, int month, int day) {
-    return LocalDateTime.of(year, month, day, 0, 0, 0).atZone(ZoneId.systemDefault()).toInstant();
+    return LocalDateTime.of(year, month, day, 0, 0, 0).atZone(ZoneId.of("UTC")).toInstant();
   }
 }
