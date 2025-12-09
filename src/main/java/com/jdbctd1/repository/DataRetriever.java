@@ -162,13 +162,13 @@ public class DataRetriever implements ProductRepository, CategoryRepository {
       }
 
       ResultSet rs = ps.executeQuery();
-      List<Product> results = new ArrayList<>();
+      List<Product> result = new ArrayList<>();
 
       while (rs.next()) {
-        results.add(createProductFromResultSet(rs));
+        result.add(createProductFromResultSet(rs));
       }
 
-      return results;
+      return result;
 
     } catch (SQLException e) {
       throw new RuntimeException(e);
@@ -193,3 +193,4 @@ public class DataRetriever implements ProductRepository, CategoryRepository {
     return product;
   }
 }
+
