@@ -10,6 +10,8 @@ import java.util.List;
 
 public class DataRetriever implements ProductRepository, CategoryRepository {
 
+  DBConnection dbConnection = new DBConnection();
+
   @Override
   public List<Category> getAllCategories() {
     String sql =
@@ -21,7 +23,7 @@ public class DataRetriever implements ProductRepository, CategoryRepository {
 
     List<Category> result = new ArrayList<>();
 
-    try (Connection con = DBConnection.getConnection();
+    try (Connection con = dbConnection.getConnection();
         PreparedStatement ps = con.prepareStatement(sql);
         ResultSet rs = ps.executeQuery()) {
 
@@ -52,7 +54,7 @@ public class DataRetriever implements ProductRepository, CategoryRepository {
     int offset = (page - 1) * size;
     List<Product> result = new ArrayList<>();
 
-    try (Connection con = DBConnection.getConnection();
+    try (Connection con = dbConnection.getConnection();
         PreparedStatement ps = con.prepareStatement(sql)) {
 
       ps.setInt(1, size);
@@ -139,7 +141,7 @@ public class DataRetriever implements ProductRepository, CategoryRepository {
       parameters.add(offset);
     }
 
-    try (Connection con = DBConnection.getConnection();
+    try (Connection con = dbConnection.getConnection();
         PreparedStatement ps = con.prepareStatement(sql.toString())) {
 
       for (int i = 0; i < parameters.size(); i++) {

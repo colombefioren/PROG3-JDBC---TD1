@@ -14,7 +14,8 @@ class DBConnectionTest {
   @DisplayName("Should create database connection successfully")
   void testGetDBConnection() {
     try {
-      Connection connection = DBConnection.getConnection();
+      DBConnection dbConnection = new DBConnection();
+      Connection connection = dbConnection.getConnection();
 
       assertNotNull(connection);
       assertFalse(connection.isClosed());
