@@ -13,8 +13,8 @@ class DBConnectionTest {
   @Test
   @DisplayName("Should create database connection successfully")
   void testGetDBConnection() {
+    DBConnection dbConnection = new DBConnection();
     try {
-      DBConnection dbConnection = new DBConnection();
       Connection connection = dbConnection.getConnection();
 
       assertNotNull(connection);
