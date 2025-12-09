@@ -141,7 +141,6 @@ class DataRetrieverTest {
     DateUtils dateUtils = new DateUtils();
     Instant minDate = dateUtils.toInstant(2024, 1, 1);
     Instant maxDate = dateUtils.toInstant(2024, 12, 1);
-    System.out.println(maxDate);
 
     List<Product> products = dataRetriever.getProductsByCriteria(null, "audio", minDate, maxDate);
 
