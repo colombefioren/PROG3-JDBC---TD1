@@ -11,13 +11,13 @@ public class Main {
     DataRetriever dataRetriever = new DataRetriever();
     DateUtils dateUtils = new DateUtils();
     // a) List<Category> getAllCategories()
-    System.out.println("=== TEST 1: getAllCategories() ===");
+    System.out.println("/////===> TEST 1: getAllCategories() <===/////");
     List<Category> categories = dataRetriever.getAllCategories();
     System.out.println("Total categories: " + categories.size());
     categories.forEach(cat -> System.out.println("  - " + cat));
 
     // b) List<Product> getProductList (int page, int size)
-    System.out.println("\n=== TEST 2: getProductList() ===");
+    System.out.println("\n/////===> TEST 2: getProductList() <===/////");
 
     System.out.println("Scenario 1 - Page 1, Size 10:");
     dataRetriever.getProductList(1, 10).forEach(p -> System.out.println("  - " + p));
@@ -33,7 +33,7 @@ public class Main {
 
     // c) List<Product> getProductsByCriteria(String productName, String categoryName, Instant
     // creationMin, instant creationMax)
-    System.out.println("\n=== TEST 3: getProductsByCriteria() ===");
+    System.out.println("\n/////===> TEST 3: getProductsByCriteria() <===/////");
 
     System.out.println(
         "Scenario 1 - productName='Dell': "
@@ -81,7 +81,7 @@ public class Main {
 
     // d) List<Product> getProductsByCriteria(String productName, String
     // categoryName, Instant creationMin, instant creationMax, int page, int size)
-    System.out.println("\n=== TEST 4: getProductsByCriteria() WITH PAGINATION ===");
+    System.out.println("\n/////===> TEST 4: getProductsByCriteria() with paginations <===/////");
 
     System.out.println(
         "Scenario 1 - All products, page 1, size 10: "

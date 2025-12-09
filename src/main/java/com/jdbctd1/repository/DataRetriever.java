@@ -93,70 +93,82 @@ public class DataRetriever implements ProductRepository, CategoryRepository {
   }
 
   private List<Product> getProductsByCriteriaWithPagination(
-      String productName,
-      String categoryName,
-      Instant creationMin,
-      Instant creationMax,
-      int page,
-      int size) {
+          String productName,
+          String categoryName,
+          Instant creationMin,
+          Instant creationMax,
+          int page,
+          int size) {
 
-    StringBuilder sql =
-        new StringBuilder(
-            """
-        SELECT p.id, p.name, p.price, p.creation_datetime,
-               pc.id AS cat_id, pc.name AS cat_name
-        FROM Product p
-        LEFT JOIN Product_category pc ON p.id = pc.product_id
-        WHERE 1=1
-        """);
+    String sql = "SELECT p.id, p.name, p.price, p.creation_datetime, " +
+            "pc.id AS cat_id, pc.name AS cat_name " +
+            "FROM Product p " +
+            "LEFT JOIN Product_category pc ON p.id = pc.product_id";
 
-    List<Object> parameters = new ArrayList<>();
+    List<Object> params = new ArrayList<>();
+
+    boolean hasWhere = false;
 
     if (productName != null && !productName.isBlank()) {
-      sql.append(" AND p.name ILIKE ?");
-      parameters.add("%" + productName + "%");
+      sql += " WHERE p.name ILIKE ?";
+      params.add("%" + productName + "%");
+      hasWhere = true;
     }
 
     if (categoryName != null && !categoryName.isBlank()) {
-      sql.append(" AND pc.name ILIKE ?");
-      parameters.add("%" + categoryName + "%");
+      if (hasWhere) {
+        sql += " AND pc.name ILIKE ?";
+      } else {
+        sql += " WHERE pc.name ILIKE ?";
+        hasWhere = true;
+      }
+      params.add("%" + categoryName + "%");
     }
 
     if (creationMin != null) {
-      sql.append(" AND p.creation_datetime >= ?");
-      parameters.add(Timestamp.from(creationMin));
+      if (hasWhere) {
+        sql += " AND p.creation_datetime >= ?";
+      } else {
+        sql += " WHERE p.creation_datetime >= ?";
+        hasWhere = true;
+      }
+      params.add(Timestamp.from(creationMin));
     }
 
     if (creationMax != null) {
-      sql.append(" AND p.creation_datetime <= ?");
-      parameters.add(Timestamp.from(creationMax));
+      if (hasWhere) {
+        sql += " AND p.creation_datetime <= ?";
+      } else {
+        sql += " WHERE p.creation_datetime <= ?";
+        hasWhere = true;
+      }
+      params.add(Timestamp.from(creationMax));
     }
 
-    sql.append(" ORDER BY p.id");
+    sql += " ORDER BY p.id";
 
     if (size > 0) {
       int offset = (page - 1) * size;
-      sql.append(" LIMIT ? OFFSET ?");
-      parameters.add(size);
-      parameters.add(offset);
+      sql += " LIMIT ? OFFSET ?";
+      params.add(size);
+      params.add(offset);
     }
 
     try (Connection con = dbConnection.getConnection();
-        PreparedStatement ps = con.prepareStatement(sql.toString())) {
+         PreparedStatement ps = con.prepareStatement(sql)) {
 
-      for (int i = 0; i < parameters.size(); i++) {
-        ps.setObject(i + 1, parameters.get(i));
+      for (int i = 0; i < params.size(); i++) {
+        ps.setObject(i + 1, params.get(i));
       }
 
-      try (ResultSet rs = ps.executeQuery()) {
-        List<Product> products = new ArrayList<>();
+      ResultSet rs = ps.executeQuery();
+      List<Product> results = new ArrayList<>();
 
-        while (rs.next()) {
-          products.add(createProductFromResultSet(rs));
-        }
-
-        return products;
+      while (rs.next()) {
+        results.add(createProductFromResultSet(rs));
       }
+
+      return results;
 
     } catch (SQLException e) {
       throw new RuntimeException(e);
