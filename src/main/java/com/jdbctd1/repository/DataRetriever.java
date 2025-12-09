@@ -23,7 +23,7 @@ public class DataRetriever implements ProductRepository, CategoryRepository {
 
     List<Category> result = new ArrayList<>();
 
-    try (Connection con = dbConnection.getConnection();
+    try (Connection con = dbConnection.getDBConnection();
         PreparedStatement ps = con.prepareStatement(sql);
         ResultSet rs = ps.executeQuery()) {
 
@@ -54,7 +54,7 @@ public class DataRetriever implements ProductRepository, CategoryRepository {
     int offset = (page - 1) * size;
     List<Product> result = new ArrayList<>();
 
-    try (Connection con = dbConnection.getConnection();
+    try (Connection con = dbConnection.getDBConnection();
         PreparedStatement ps = con.prepareStatement(sql)) {
 
       ps.setInt(1, size);
@@ -93,17 +93,18 @@ public class DataRetriever implements ProductRepository, CategoryRepository {
   }
 
   private List<Product> getProductsByCriteriaWithPagination(
-          String productName,
-          String categoryName,
-          Instant creationMin,
-          Instant creationMax,
-          int page,
-          int size) {
+      String productName,
+      String categoryName,
+      Instant creationMin,
+      Instant creationMax,
+      int page,
+      int size) {
 
-    String sql = "SELECT p.id, p.name, p.price, p.creation_datetime, " +
-            "pc.id AS cat_id, pc.name AS cat_name " +
-            "FROM Product p " +
-            "LEFT JOIN Product_category pc ON p.id = pc.product_id";
+    String sql =
+        "SELECT p.id, p.name, p.price, p.creation_datetime, "
+            + "pc.id AS cat_id, pc.name AS cat_name "
+            + "FROM Product p "
+            + "LEFT JOIN Product_category pc ON p.id = pc.product_id";
 
     List<Object> params = new ArrayList<>();
 
@@ -154,8 +155,8 @@ public class DataRetriever implements ProductRepository, CategoryRepository {
       params.add(offset);
     }
 
-    try (Connection con = dbConnection.getConnection();
-         PreparedStatement ps = con.prepareStatement(sql)) {
+    try (Connection con = dbConnection.getDBConnection();
+        PreparedStatement ps = con.prepareStatement(sql)) {
 
       for (int i = 0; i < params.size(); i++) {
         ps.setObject(i + 1, params.get(i));
@@ -193,4 +194,3 @@ public class DataRetriever implements ProductRepository, CategoryRepository {
     return product;
   }
 }
-

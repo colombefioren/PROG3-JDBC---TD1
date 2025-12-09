@@ -15,7 +15,7 @@ class DBConnectionTest {
   void testGetDBConnection() {
     DBConnection dbConnection = new DBConnection();
     try {
-      Connection connection = dbConnection.getConnection();
+      Connection connection = dbConnection.getDBConnection();
 
       assertNotNull(connection);
       assertFalse(connection.isClosed());

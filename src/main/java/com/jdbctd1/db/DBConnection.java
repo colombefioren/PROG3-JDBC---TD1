@@ -9,7 +9,7 @@ public class DBConnection {
   public final String DB_USER = "product_manager_user";
   public final String DB_PASSWORD = "123456";
 
-  public Connection getConnection() throws SQLException {
+  public Connection getDBConnection() throws SQLException {
     return DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASSWORD);
   }
 }
