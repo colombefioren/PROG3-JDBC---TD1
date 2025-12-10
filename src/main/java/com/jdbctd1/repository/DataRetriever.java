@@ -9,8 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataRetriever implements ProductRepository, CategoryRepository {
+  private final DBConnection dbConnection;
 
-  DBConnection dbConnection = new DBConnection();
+  public DataRetriever() {
+    this.dbConnection = new DBConnection();
+  }
 
   @Override
   public List<Category> getAllCategories() {
@@ -100,27 +103,27 @@ public class DataRetriever implements ProductRepository, CategoryRepository {
       int page,
       int size) {
 
-    String sql =
-        "SELECT p.id, p.name, p.price, p.creation_datetime, "
-            + "pc.id AS cat_id, pc.name AS cat_name "
-            + "FROM Product p "
-            + "LEFT JOIN Product_category pc ON p.id = pc.product_id";
+    StringBuilder sqlBuilder = new StringBuilder();
+    sqlBuilder
+        .append("SELECT p.id, p.name, p.price, p.creation_datetime, ")
+        .append("pc.id AS cat_id, pc.name AS cat_name ")
+        .append("FROM Product p ")
+        .append("LEFT JOIN Product_category pc ON p.id = pc.product_id");
 
     List<Object> params = new ArrayList<>();
-
     boolean hasWhere = false;
 
     if (productName != null && !productName.isBlank()) {
-      sql += " WHERE p.name ILIKE ?";
+      sqlBuilder.append(" WHERE p.name ILIKE ?");
       params.add("%" + productName + "%");
       hasWhere = true;
     }
 
     if (categoryName != null && !categoryName.isBlank()) {
       if (hasWhere) {
-        sql += " AND pc.name ILIKE ?";
+        sqlBuilder.append(" AND pc.name ILIKE ?");
       } else {
-        sql += " WHERE pc.name ILIKE ?";
+        sqlBuilder.append(" WHERE pc.name ILIKE ?");
         hasWhere = true;
       }
       params.add("%" + categoryName + "%");
@@ -128,9 +131,9 @@ public class DataRetriever implements ProductRepository, CategoryRepository {
 
     if (creationMin != null) {
       if (hasWhere) {
-        sql += " AND p.creation_datetime >= ?";
+        sqlBuilder.append(" AND p.creation_datetime >= ?");
       } else {
-        sql += " WHERE p.creation_datetime >= ?";
+        sqlBuilder.append(" WHERE p.creation_datetime >= ?");
         hasWhere = true;
       }
       params.add(Timestamp.from(creationMin));
@@ -138,22 +141,24 @@ public class DataRetriever implements ProductRepository, CategoryRepository {
 
     if (creationMax != null) {
       if (hasWhere) {
-        sql += " AND p.creation_datetime <= ?";
+        sqlBuilder.append(" AND p.creation_datetime <= ?");
       } else {
-        sql += " WHERE p.creation_datetime <= ?";
+        sqlBuilder.append(" WHERE p.creation_datetime <= ?");
         hasWhere = true;
       }
       params.add(Timestamp.from(creationMax));
     }
 
-    sql += " ORDER BY p.id";
+    sqlBuilder.append(" ORDER BY p.id");
 
     if (size > 0) {
       int offset = (page - 1) * size;
-      sql += " LIMIT ? OFFSET ?";
+      sqlBuilder.append(" LIMIT ? OFFSET ?");
       params.add(size);
       params.add(offset);
     }
+
+    String sql = sqlBuilder.toString();
 
     try (Connection con = dbConnection.getDBConnection();
         PreparedStatement ps = con.prepareStatement(sql)) {

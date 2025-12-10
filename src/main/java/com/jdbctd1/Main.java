@@ -8,8 +8,10 @@ import java.util.List;
 
 public class Main {
   public static void main(String[] args) {
+
     DataRetriever dataRetriever = new DataRetriever();
     DateUtils dateUtils = new DateUtils();
+
     // a) List<Category> getAllCategories()
     System.out.println("/////===> TEST 1: getAllCategories() <===/////");
     List<Category> categories = dataRetriever.getAllCategories();

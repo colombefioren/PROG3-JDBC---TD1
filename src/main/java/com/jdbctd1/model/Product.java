@@ -1,6 +1,7 @@
 package com.jdbctd1.model;
 
 import java.time.Instant;
+import java.util.Objects;
 
 public class Product {
 
@@ -57,5 +58,20 @@ public class Product {
   @Override
   public String toString() {
     return name + " | (ID: " + id + " | " + creationDatetime + ") | CATEGORY: " + category;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || getClass() != o.getClass()) return false;
+    Product product = (Product) o;
+    return id == product.id
+        && Objects.equals(name, product.name)
+        && Objects.equals(creationDatetime, product.creationDatetime)
+        && Objects.equals(category, product.category);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, name, creationDatetime, category);
   }
 }

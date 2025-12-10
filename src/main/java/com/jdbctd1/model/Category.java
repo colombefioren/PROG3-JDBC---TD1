@@ -1,5 +1,7 @@
 package com.jdbctd1.model;
 
+import java.util.Objects;
+
 public class Category {
 
   private int id;
@@ -31,5 +33,17 @@ public class Category {
   @Override
   public String toString() {
     return name + " (ID: " + id + ")";
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || getClass() != o.getClass()) return false;
+    Category category = (Category) o;
+    return id == category.id && Objects.equals(name, category.name);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, name);
   }
 }
